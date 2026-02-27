@@ -1,0 +1,27 @@
+{
+  "name": "immortal",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "云上香 - 在线祈福应用",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/tsconfig": "^0.8.1",
+    "@vueuse/core": "^14.2.1",
+    "autoprefixer": "^10.4.27",
+    "pinia": "^3.0.4",
+    "pinia-plugin-persistedstate": "^4.7.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}
