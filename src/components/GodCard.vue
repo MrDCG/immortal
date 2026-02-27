@@ -8,7 +8,7 @@
     <!-- 光环 -->
     <div class="glow"></div>
 
-    <!-- 关羽图片 -->
+    <!-- 关羽图片 - 帧动画 -->
     <img
       :src="currentImage"
       :alt="god.name"
@@ -38,40 +38,113 @@ import BlessingPopup from './BlessingPopup.vue'
 const props = defineProps<{ god: God }>()
 const blessingPopupRef = ref<InstanceType<typeof BlessingPopup>>()
 
-// 预加载
-const preloadImages = () => {
-  const { images } = props.god
-  ;[images.default, images.closed].forEach((src) => {
+// 帧动画相关状态
+const currentFrameIndex = ref(0)
+let animationFrameId: number | null = null
+let lastTimestamp = 0
+
+// 检查是否使用帧动画
+const useFrameAnimation = computed(() => {
+  return props.god.images.frames && props.god.images.frames.length > 0
+})
+
+// 获取当前显示的图片
+const currentImage = computed(() => {
+  if (useFrameAnimation.value && props.god.images.frames) {
+    return props.god.images.frames[currentFrameIndex.value]
+  }
+  // 兼容旧版静态图片
+  return props.god.images.default || ''
+})
+
+// 帧动画配置
+const animationConfig = computed(() => {
+  return {
+    fps: props.god.animation?.fps || 12,
+    loop: props.god.animation?.loop !== false,
+  }
+})
+
+// 预加载所有帧图片
+const preloadFrames = () => {
+  if (!useFrameAnimation.value) return
+
+  const frames = props.god.images.frames!
+  frames.forEach((src) => {
     const img = new Image()
     img.src = src
   })
 }
 
-// 眨眼
+// 帧动画循环
+const animateFrames = (timestamp: number) => {
+  if (!lastTimestamp) lastTimestamp = timestamp
+
+  const elapsed = timestamp - lastTimestamp
+  const frameInterval = 1000 / animationConfig.value.fps
+
+  if (elapsed >= frameInterval) {
+    const frameCount = props.god.images.frames?.length || 1
+
+    // 前进到下一帧
+    currentFrameIndex.value = (currentFrameIndex.value + 1) % frameCount
+
+    lastTimestamp = timestamp
+  }
+
+  if (animationConfig.value.loop) {
+    animationFrameId = requestAnimationFrame(animateFrames)
+  }
+}
+
+// 启动帧动画
+const startFrameAnimation = () => {
+  if (!useFrameAnimation.value) return
+
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+  }
+
+  lastTimestamp = 0
+  animationFrameId = requestAnimationFrame(animateFrames)
+}
+
+// 停止帧动画
+const stopFrameAnimation = () => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+    animationFrameId = null
+  }
+}
+
+// 旧版眨眼动画（兼容非帧动画神仙）
 const isEyesClosed = ref(false)
 let blinkTimer: number | undefined
 
 const startBlink = () => {
+  if (useFrameAnimation.value) return
+
   blinkTimer = window.setInterval(() => {
     isEyesClosed.value = true
     setTimeout(() => { isEyesClosed.value = false }, 120)
   }, 5000 + Math.random() * 3000)
 }
 
-const currentImage = computed(() =>
-  isEyesClosed.value ? props.god.images.closed : props.god.images.default
-)
-
 const showBlessing = () => {
   blessingPopupRef.value?.show()
 }
 
 onMounted(() => {
-  preloadImages()
-  startBlink()
+  preloadFrames()
+  if (useFrameAnimation.value) {
+    startFrameAnimation()
+  } else {
+    startBlink()
+  }
 })
 
 onUnmounted(() => {
+  stopFrameAnimation()
   if (blinkTimer) clearInterval(blinkTimer)
 })
 </script>
@@ -84,7 +157,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
-  /* 画轴背景图 */
   background-image: url('/assets/画轴背景.png');
   background-size: cover;
   background-position: center;
@@ -122,12 +194,12 @@ onUnmounted(() => {
 /* 关羽图片 */
 .god-image {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   transform: translate(calc(-50% + 3px), calc(-42% - 60px));
   z-index: 10;
   width: 380px;
-  height: 620px;
+  height: 570px;
   object-fit: cover;
   border-radius: 15px;
   filter: drop-shadow(0 5px 20px rgba(139, 0, 0, 0.15));
@@ -141,7 +213,7 @@ onUnmounted(() => {
 /* 神仙描述 */
 .god-desc {
   position: absolute;
-  top: 72%;
+  top: 66%;
   left: calc(51% + 221px);
   transform: translateY(-50%);
   writing-mode: vertical-rl;
@@ -158,7 +230,7 @@ onUnmounted(() => {
 /* 上香按钮 */
 .actions {
   position: absolute;
-  bottom: 6%;
+  bottom: 4%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;

@@ -41,6 +41,7 @@ watch(
   border-radius: 25px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border: 2px solid #d4af37;
+  white-space: nowrap;
 }
 
 .counter-icon {
