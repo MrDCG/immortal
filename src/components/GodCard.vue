@@ -6,21 +6,24 @@
     </div>
 
     <!-- 光环 -->
-    <div class="glow"></div>
+    <div class="glow" :style="{ background: glowGradient }"></div>
 
-    <!-- 关羽图片 - 帧动画 -->
-    <img
-      :src="currentImage"
-      :alt="god.name"
-      class="god-image"
-    />
+    <!-- 神仙图片 -->
+    <Transition name="god-fade" mode="out-in">
+      <img
+        :key="god.id"
+        :src="currentImage"
+        :alt="god.name"
+        class="god-image"
+      />
+    </Transition>
 
     <!-- 右侧描述 -->
-    <div class="god-desc">西路财神 关羽</div>
+    <div class="god-desc">{{ god.title }} {{ god.name }}</div>
 
     <!-- 上香按钮 -->
     <div class="actions">
-      <Incense @complete="showBlessing" />
+      <Incense :god-id="god.id" @complete="showBlessing" />
     </div>
 
     <!-- 祈福语弹窗 -->
@@ -29,13 +32,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { God } from '@/types'
 import Counter from './Counter.vue'
 import Incense from './Incense.vue'
 import BlessingPopup from './BlessingPopup.vue'
 
 const props = defineProps<{ god: God }>()
+const emit = defineEmits<{
+  keyPress: [direction: 'left' | 'right']
+}>()
+
 const blessingPopupRef = ref<InstanceType<typeof BlessingPopup>>()
 
 // 帧动画相关状态
@@ -53,8 +60,12 @@ const currentImage = computed(() => {
   if (useFrameAnimation.value && props.god.images.frames) {
     return props.god.images.frames[currentFrameIndex.value]
   }
-  // 兼容旧版静态图片
   return props.god.images.default || ''
+})
+
+// 光环渐变色
+const glowGradient = computed(() => {
+  return `radial-gradient(circle, ${props.god.color}40 0%, transparent 60%)`
 })
 
 // 帧动画配置
@@ -85,10 +96,7 @@ const animateFrames = (timestamp: number) => {
 
   if (elapsed >= frameInterval) {
     const frameCount = props.god.images.frames?.length || 1
-
-    // 前进到下一帧
     currentFrameIndex.value = (currentFrameIndex.value + 1) % frameCount
-
     lastTimestamp = timestamp
   }
 
@@ -106,6 +114,7 @@ const startFrameAnimation = () => {
   }
 
   lastTimestamp = 0
+  currentFrameIndex.value = 0
   animationFrameId = requestAnimationFrame(animateFrames)
 }
 
@@ -117,18 +126,15 @@ const stopFrameAnimation = () => {
   }
 }
 
-// 旧版眨眼动画（兼容非帧动画神仙）
-const isEyesClosed = ref(false)
-let blinkTimer: number | undefined
-
-const startBlink = () => {
-  if (useFrameAnimation.value) return
-
-  blinkTimer = window.setInterval(() => {
-    isEyesClosed.value = true
-    setTimeout(() => { isEyesClosed.value = false }, 120)
-  }, 5000 + Math.random() * 3000)
-}
+// 监听神仙切换
+watch(() => props.god, () => {
+  stopFrameAnimation()
+  currentFrameIndex.value = 0
+  if (useFrameAnimation.value) {
+    preloadFrames()
+    startFrameAnimation()
+  }
+})
 
 const showBlessing = () => {
   blessingPopupRef.value?.show()
@@ -138,14 +144,11 @@ onMounted(() => {
   preloadFrames()
   if (useFrameAnimation.value) {
     startFrameAnimation()
-  } else {
-    startBlink()
   }
 })
 
 onUnmounted(() => {
   stopFrameAnimation()
-  if (blinkTimer) clearInterval(blinkTimer)
 })
 </script>
 
@@ -180,7 +183,6 @@ onUnmounted(() => {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 60%);
   animation: glow-pulse 3s ease-in-out infinite;
   pointer-events: none;
   z-index: 1;
@@ -191,7 +193,7 @@ onUnmounted(() => {
   50% { opacity: 1; }
 }
 
-/* 关羽图片 */
+/* 神仙图片 */
 .god-image {
   position: absolute;
   top: 48%;
@@ -203,6 +205,22 @@ onUnmounted(() => {
   object-fit: cover;
   border-radius: 15px;
   filter: drop-shadow(0 5px 20px rgba(139, 0, 0, 0.15));
+}
+
+/* 神仙切换过渡动画 */
+.god-fade-enter-active,
+.god-fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.god-fade-enter-from {
+  opacity: 0;
+  transform: translate(calc(-50% + 3px), calc(-42% - 60px)) scale(0.95);
+}
+
+.god-fade-leave-to {
+  opacity: 0;
+  transform: translate(calc(-50% + 3px), calc(-42% - 60px)) scale(1.05);
 }
 
 /* 神仙描述 */
@@ -222,7 +240,7 @@ onUnmounted(() => {
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-/* 上香按钮 - 使用固定像素值确保跨浏览器一致 */
+/* 上香按钮 */
 .actions {
   position: fixed;
   bottom: 50px;
@@ -251,6 +269,10 @@ onUnmounted(() => {
 
   .actions {
     bottom: 30px;
+  }
+
+  .god-desc {
+    font-size: 1rem;
   }
 }
 </style>

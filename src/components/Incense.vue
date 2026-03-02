@@ -18,6 +18,10 @@ import { ref, nextTick, onUnmounted } from 'vue'
 import { useIncenseStore } from '@/stores/incense'
 import lottie from 'lottie-web'
 
+const props = defineProps<{
+  godId: string
+}>()
+
 const emit = defineEmits<{
   complete: []
 }>()
@@ -31,7 +35,7 @@ const handleIncense = async () => {
   if (isBurning.value) return
 
   isBurning.value = true
-  incenseStore.addIncense('guanyu')
+  incenseStore.addIncense(props.godId)
 
   // 等待 DOM 更新后启动动画
   await nextTick()
