@@ -1,11 +1,11 @@
 import type { God } from '@/types'
 
-// 生成关羽73帧图片路径
+// 生成关羽121帧图片路径
 const generateGuanyuFrames = (): string[] => {
   const frames: string[] = []
-  for (let i = 0; i <= 72; i++) {
+  for (let i = 0; i <= 120; i++) {
     const frameNumber = i.toString().padStart(5, '0')
-    frames.push(`/assets/gods/guanyu/guanyu_${frameNumber}.png`)
+    frames.push(`/assets/gods/guanyu/guanyushenxiang_${frameNumber}.png`)
   }
   return frames
 }
@@ -21,8 +21,8 @@ export const gods: God[] = [
     type: 'wealth',
     images: {
       frames: guanyuFrames,
-      frameCount: 73,
-      framePath: '/assets/gods/guanyu/guanyu_{index}.png',
+      frameCount: 121,
+      framePath: '/assets/gods/guanyu/guanyushenxiang_{index}.png',
       // 保留兼容性
       default: guanyuFrames[0],
     },
@@ -38,7 +38,7 @@ export const gods: God[] = [
       '黄金万两',
     ],
     animation: {
-      fps: 12,  // 12fps，约6秒播放完整循环
+      fps: 12,  // 12fps，约10秒播放完整循环
       loop: true,
     },
   },

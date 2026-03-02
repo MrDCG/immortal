@@ -203,11 +203,6 @@ onUnmounted(() => {
   object-fit: cover;
   border-radius: 15px;
   filter: drop-shadow(0 5px 20px rgba(139, 0, 0, 0.15));
-  transition: transform 0.3s ease;
-}
-
-.god-image:hover {
-  transform: translate(calc(-50% + 3px), calc(-42% - 60px)) scale(1.02);
 }
 
 /* 神仙描述 */
@@ -227,10 +222,10 @@ onUnmounted(() => {
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-/* 上香按钮 */
+/* 上香按钮 - 使用固定像素值确保跨浏览器一致 */
 .actions {
-  position: absolute;
-  bottom: 4%;
+  position: fixed;
+  bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -255,7 +250,7 @@ onUnmounted(() => {
   }
 
   .actions {
-    bottom: 5%;
+    bottom: 30px;
   }
 }
 </style>

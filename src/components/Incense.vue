@@ -201,41 +201,45 @@ button.worship-btn:hover .shimmer::after {
   z-index: 2;
 }
 
-/* 容器 */
+/* 容器 - 与按钮同尺寸 */
 .incense-container {
-  margin-top: 30px;
   z-index: 10;
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 125px;
+  height: 41px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Lottie 容器 */
+/* Lottie 容器 - 绝对定位不影响布局 */
 .lottie-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 400px;
   height: 400px;
   animation: fadeInOut 3s ease-in-out forwards;
+  pointer-events: none;
 }
 
 @keyframes fadeInOut {
   0% {
     opacity: 0;
-    transform: scale(0.8);
+    transform: translate(-50%, -50%) scale(0.8);
   }
   10% {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
   80% {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
   100% {
     opacity: 0;
-    transform: scale(0.8);
+    transform: translate(-50%, -50%) scale(0.8);
   }
 }
 </style>
