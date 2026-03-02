@@ -10,29 +10,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { gods, defaultGodIndex } from './data/gods'
+import { useIncenseStore } from '@/stores/incense'
 import GodCard from './components/GodCard.vue'
 import Navigation from './components/Navigation.vue'
 import DailyDirections from './components/DailyDirections.vue'
 
-const currentGodIndex = ref(defaultGodIndex)
+const incenseStore = useIncenseStore()
+
+// 初始化神仙索引
+incenseStore.setCurrentGodIndex(defaultGodIndex)
+
+const currentGodIndex = computed(() => incenseStore.currentGodIndex)
 const currentGod = computed(() => gods[currentGodIndex.value])
 
 const prevGod = () => {
   if (currentGodIndex.value > 0) {
-    currentGodIndex.value--
+    incenseStore.setCurrentGodIndex(currentGodIndex.value - 1)
   }
 }
 
 const nextGod = () => {
   if (currentGodIndex.value < gods.length - 1) {
-    currentGodIndex.value++
+    incenseStore.setCurrentGodIndex(currentGodIndex.value + 1)
   }
 }
 
 const goToGod = (index: number) => {
-  currentGodIndex.value = index
+  incenseStore.setCurrentGodIndex(index)
 }
 
 const handleKeyPress = (direction: 'left' | 'right') => {
