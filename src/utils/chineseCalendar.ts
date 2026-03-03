@@ -47,14 +47,14 @@ export function getDayStem(date: Date = new Date()): TianGan {
 export function getCaishenDirection(date: Date = new Date()): Direction {
   const stem = getDayStem(date)
   
-  // 《择吉纲要》版本财神方位
+  // 财神方位歌诀：甲艮乙坤丙丁兑，戊己坎位庚辛东，壬癸正南
   const caishenMap: Record<TianGan, Direction> = {
-    '甲': '东北',
-    '乙': '东南',   // 乙日财神在东南
-    '丙': '西南',
-    '丁': '西南',
-    '戊': '正北',
-    '己': '正北',
+    '甲': '东北',  // 艮方
+    '乙': '西南',  // 坤方
+    '丙': '正西',  // 兑方
+    '丁': '正西',  // 兑方
+    '戊': '正北',  // 坎方
+    '己': '正北',  // 坎方
     '庚': '正东',
     '辛': '正东',
     '壬': '正南',

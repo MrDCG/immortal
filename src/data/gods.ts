@@ -10,7 +10,29 @@ const generateGuanyuFrames = (): string[] => {
   return frames
 }
 
+// 生成王亥121帧图片路径
+const generateWanghaiFrames = (): string[] => {
+  const frames: string[] = []
+  for (let i = 0; i <= 120; i++) {
+    const frameNumber = i.toString().padStart(5, '0')
+    frames.push(`/assets/gods/wanghai/wanghaishenxiang_${frameNumber}.png`)
+  }
+  return frames
+}
+
+// 生成赵公明121帧图片路径
+const generateZhaogongmingFrames = (): string[] => {
+  const frames: string[] = []
+  for (let i = 0; i <= 120; i++) {
+    const frameNumber = i.toString().padStart(5, '0')
+    frames.push(`/assets/gods/zhaogongming/zhaogongmingshenxiang_${frameNumber}.png`)
+  }
+  return frames
+}
+
 const guanyuFrames = generateGuanyuFrames()
+const wanghaiFrames = generateWanghaiFrames()
+const zhaogongmingFrames = generateZhaogongmingFrames()
 
 export const gods: God[] = [
   // 东路财神 - 比干
@@ -60,7 +82,7 @@ export const gods: God[] = [
       '黄金万两',
     ],
     animation: {
-      fps: 12,
+      fps: 30,
       loop: true,
     },
   },
@@ -94,7 +116,10 @@ export const gods: God[] = [
     direction: '北',
     type: 'wealth',
     images: {
-      default: '/assets/gods/zhaogongming/赵公明.png',
+      frames: zhaogongmingFrames,
+      frameCount: 121,
+      framePath: '/assets/gods/zhaogongming/zhaogongmingshenxiang_{index}.png',
+      default: zhaogongmingFrames[0],
     },
     color: '#2F2F2F',
     blessings: [
@@ -107,6 +132,10 @@ export const gods: God[] = [
       '富贵吉祥',
       '财星高照',
     ],
+    animation: {
+      fps: 30,
+      loop: true,
+    },
   },
   // 中路财神 - 王亥
   {
@@ -116,7 +145,10 @@ export const gods: God[] = [
     direction: '中',
     type: 'wealth',
     images: {
-      default: '/assets/gods/wanghai/王亥.png',
+      frames: wanghaiFrames,
+      frameCount: 121,
+      framePath: '/assets/gods/wanghai/wanghaishenxiang_{index}.png',
+      default: wanghaiFrames[0],
     },
     color: '#6B3FA0',
     blessings: [
@@ -129,6 +161,10 @@ export const gods: God[] = [
       '日进斗金',
       '财星高照',
     ],
+    animation: {
+      fps: 30,
+      loop: true,
+    },
   },
   // 月老
   {
