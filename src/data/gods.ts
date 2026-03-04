@@ -34,6 +34,29 @@ const guanyuFrames = generateGuanyuFrames()
 const wanghaiFrames = generateWanghaiFrames()
 const zhaogongmingFrames = generateZhaogongmingFrames()
 
+// 生成比干121帧图片路径
+const generateBiganFrames = (): string[] => {
+  const frames: string[] = []
+  for (let i = 0; i <= 120; i++) {
+    const frameNumber = i.toString().padStart(5, '0')
+    frames.push(`/assets/gods/bigan/bigan_${frameNumber}.png`)
+  }
+  return frames
+}
+
+// 生成月老121帧图片路径
+const generateYuelaoFrames = (): string[] => {
+  const frames: string[] = []
+  for (let i = 0; i <= 120; i++) {
+    const frameNumber = i.toString().padStart(5, '0')
+    frames.push(`/assets/gods/yuelao/yuelao_${frameNumber}.png`)
+  }
+  return frames
+}
+
+const biganFrames = generateBiganFrames()
+const yuelaoFrames = generateYuelaoFrames()
+
 export const gods: God[] = [
   // 东路财神 - 比干
   {
@@ -43,7 +66,10 @@ export const gods: God[] = [
     direction: '东',
     type: 'wealth',
     images: {
-      default: '/assets/gods/bigan/比干.png',
+      frames: biganFrames,
+      frameCount: 121,
+      framePath: '/assets/gods/bigan/bigan_{index}.png',
+      default: biganFrames[0],
     },
     color: '#D4AF37',
     blessings: [
@@ -56,6 +82,10 @@ export const gods: God[] = [
       '财星高照',
       '日进斗金',
     ],
+    animation: {
+      fps: 30,
+      loop: true,
+    },
   },
   // 西路财神 - 关羽
   {
@@ -174,7 +204,10 @@ export const gods: God[] = [
     direction: '中',
     type: 'love',
     images: {
-      default: '/assets/gods/yuelao/月老.png',
+      frames: yuelaoFrames,
+      frameCount: 121,
+      framePath: '/assets/gods/yuelao/yuelao_{index}.png',
+      default: yuelaoFrames[0],
     },
     color: '#FF69B4',
     blessings: [
@@ -189,6 +222,10 @@ export const gods: God[] = [
       '天作之合',
       '白头偕老',
     ],
+    animation: {
+      fps: 30,
+      loop: true,
+    },
   },
 ]
 
