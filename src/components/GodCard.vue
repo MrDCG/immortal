@@ -12,14 +12,15 @@
     <Transition name="god-fade" mode="out-in">
       <video
         v-if="god.images.video"
+        ref="videoRef"
         :key="god.id"
         :src="god.images.video"
-        :poster="god.images.poster"
         class="god-image"
         autoplay
         loop
         muted
         playsinline
+        @loadedmetadata="setPlaybackRate"
       />
       <img
         v-else
@@ -53,11 +54,24 @@ import BlessingPopup from './BlessingPopup.vue'
 const props = defineProps<{ god: God }>()
 
 const blessingPopupRef = ref<InstanceType<typeof BlessingPopup>>()
+const videoRef = ref<HTMLVideoElement | null>(null)
+
+// 需要减速的神像
+const slowPlaybackGods: Record<string, number> = {
+  chaiwangye: 0.7,
+  wanghai: 0.7,
+}
 
 // 光环渐变色
 const glowGradient = computed(() => {
   return `radial-gradient(circle, ${props.god.color}40 0%, transparent 60%)`
 })
+
+const setPlaybackRate = () => {
+  if (videoRef.value && slowPlaybackGods[props.god.id]) {
+    videoRef.value.playbackRate = slowPlaybackGods[props.god.id]
+  }
+}
 
 const showBlessing = () => {
   blessingPopupRef.value?.show()
