@@ -1,62 +1,5 @@
 import type { God } from '@/types'
 
-// 生成关羽121帧图片路径
-const generateGuanyuFrames = (): string[] => {
-  const frames: string[] = []
-  for (let i = 0; i <= 120; i++) {
-    const frameNumber = i.toString().padStart(5, '0')
-    frames.push(`/assets/gods/guanyu/guanyushenxiang_${frameNumber}.png`)
-  }
-  return frames
-}
-
-// 生成王亥121帧图片路径
-const generateWanghaiFrames = (): string[] => {
-  const frames: string[] = []
-  for (let i = 0; i <= 120; i++) {
-    const frameNumber = i.toString().padStart(5, '0')
-    frames.push(`/assets/gods/wanghai/wanghaishenxiang_${frameNumber}.png`)
-  }
-  return frames
-}
-
-// 生成赵公明121帧图片路径
-const generateZhaogongmingFrames = (): string[] => {
-  const frames: string[] = []
-  for (let i = 0; i <= 120; i++) {
-    const frameNumber = i.toString().padStart(5, '0')
-    frames.push(`/assets/gods/zhaogongming/zhaogongmingshenxiang_${frameNumber}.png`)
-  }
-  return frames
-}
-
-const guanyuFrames = generateGuanyuFrames()
-const wanghaiFrames = generateWanghaiFrames()
-const zhaogongmingFrames = generateZhaogongmingFrames()
-
-// 生成比干121帧图片路径
-const generateBiganFrames = (): string[] => {
-  const frames: string[] = []
-  for (let i = 0; i <= 120; i++) {
-    const frameNumber = i.toString().padStart(5, '0')
-    frames.push(`/assets/gods/bigan/bigan_${frameNumber}.png`)
-  }
-  return frames
-}
-
-// 生成月老121帧图片路径
-const generateYuelaoFrames = (): string[] => {
-  const frames: string[] = []
-  for (let i = 0; i <= 120; i++) {
-    const frameNumber = i.toString().padStart(5, '0')
-    frames.push(`/assets/gods/yuelao/yuelao_${frameNumber}.png`)
-  }
-  return frames
-}
-
-const biganFrames = generateBiganFrames()
-const yuelaoFrames = generateYuelaoFrames()
-
 export const gods: God[] = [
   // 东路财神 - 比干
   {
@@ -66,10 +9,9 @@ export const gods: God[] = [
     direction: '东',
     type: 'wealth',
     images: {
-      frames: biganFrames,
-      frameCount: 121,
-      framePath: '/assets/gods/bigan/bigan_{index}.png',
-      default: biganFrames[0],
+      video: '/assets/gods/bigan/bigan.webm',
+      poster: '/assets/gods/bigan/bigan_00000.png',
+      default: '/assets/gods/bigan/bigan_00000.png',
     },
     color: '#D4AF37',
     blessings: [
@@ -82,10 +24,6 @@ export const gods: God[] = [
       '财星高照',
       '日进斗金',
     ],
-    animation: {
-      fps: 30,
-      loop: true,
-    },
   },
   // 西路财神 - 关羽
   {
@@ -95,10 +33,9 @@ export const gods: God[] = [
     direction: '西',
     type: 'wealth',
     images: {
-      frames: guanyuFrames,
-      frameCount: 121,
-      framePath: '/assets/gods/guanyu/guanyushenxiang_{index}.png',
-      default: guanyuFrames[0],
+      video: '/assets/gods/guanyu/guanyu.webm',
+      poster: '/assets/gods/guanyu/guanyushenxiang_00000.png',
+      default: '/assets/gods/guanyu/guanyushenxiang_00000.png',
     },
     color: '#C41E3A',
     blessings: [
@@ -111,10 +48,6 @@ export const gods: God[] = [
       '财运亨通',
       '黄金万两',
     ],
-    animation: {
-      fps: 30,
-      loop: true,
-    },
   },
   // 南路财神 - 柴王爷
   {
@@ -124,7 +57,9 @@ export const gods: God[] = [
     direction: '南',
     type: 'wealth',
     images: {
-      default: '/assets/gods/chaiwangye/柴王爷.png',
+      video: '/assets/gods/chaiwangye/chaiwangye.webm',
+      poster: '/assets/gods/chaiwangye/chaiwangye_00000.png',
+      default: '/assets/gods/chaiwangye/chaiwangye_00000.png',
     },
     color: '#B8860B',
     blessings: [
@@ -146,10 +81,9 @@ export const gods: God[] = [
     direction: '北',
     type: 'wealth',
     images: {
-      frames: zhaogongmingFrames,
-      frameCount: 121,
-      framePath: '/assets/gods/zhaogongming/zhaogongmingshenxiang_{index}.png',
-      default: zhaogongmingFrames[0],
+      video: '/assets/gods/zhaogongming/zhaogongming.webm',
+      poster: '/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.png',
+      default: '/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.png',
     },
     color: '#2F2F2F',
     blessings: [
@@ -162,10 +96,6 @@ export const gods: God[] = [
       '富贵吉祥',
       '财星高照',
     ],
-    animation: {
-      fps: 30,
-      loop: true,
-    },
   },
   // 中路财神 - 王亥
   {
@@ -175,10 +105,9 @@ export const gods: God[] = [
     direction: '中',
     type: 'wealth',
     images: {
-      frames: wanghaiFrames,
-      frameCount: 121,
-      framePath: '/assets/gods/wanghai/wanghaishenxiang_{index}.png',
-      default: wanghaiFrames[0],
+      video: '/assets/gods/wanghai/wanghai.webm',
+      poster: '/assets/gods/wanghai/wanghaishenxiang_00000.png',
+      default: '/assets/gods/wanghai/wanghaishenxiang_00000.png',
     },
     color: '#6B3FA0',
     blessings: [
@@ -191,10 +120,6 @@ export const gods: God[] = [
       '日进斗金',
       '财星高照',
     ],
-    animation: {
-      fps: 30,
-      loop: true,
-    },
   },
   // 月老
   {
@@ -204,10 +129,9 @@ export const gods: God[] = [
     direction: '中',
     type: 'love',
     images: {
-      frames: yuelaoFrames,
-      frameCount: 121,
-      framePath: '/assets/gods/yuelao/yuelao_{index}.png',
-      default: yuelaoFrames[0],
+      video: '/assets/gods/yuelao/yuelao.webm',
+      poster: '/assets/gods/yuelao/yuelao_00000.png',
+      default: '/assets/gods/yuelao/yuelao_00000.png',
     },
     color: '#FF69B4',
     blessings: [
@@ -222,10 +146,6 @@ export const gods: God[] = [
       '天作之合',
       '白头偕老',
     ],
-    animation: {
-      fps: 30,
-      loop: true,
-    },
   },
 ]
 

@@ -6,25 +6,14 @@ export interface God {
   direction: string
   type: 'wealth' | 'love'
   images: {
-    // 支持帧动画
-    frames?: string[]  // 帧序列图片路径数组
-    frameCount?: number // 帧总数
-    framePath?: string  // 帧路径模板，如 '/assets/gods/guanyu/frame_{index}.png'
+    // 视频动画（推荐，体积小加载快）
+    video?: string    // 视频路径，如 '/assets/gods/guanyu/guanyu.webm'
+    poster?: string   // 视频封面图
     // 兼容旧版静态图片
     default?: string
-    closed?: string
-    halfClosed?: string
-    quarterClosed?: string
-    threeQuarterClosed?: string
   }
   color: string
   blessings: string[]
-  // 动画配置
-  animation?: {
-    fps?: number      // 帧率，默认 15
-    loop?: boolean    // 是否循环，默认 true
-    idleRange?: [number, number]  // 闲置状态帧范围
-  }
 }
 
 // 上香记录类型

@@ -8,15 +8,23 @@
       <span class="shimmer"></span>
     </button>
 
-    <!-- Lottie 动画容器 -->
-    <div v-else ref="lottieRef" class="lottie-container"></div>
+    <!-- 视频动画容器 -->
+    <div v-else class="video-container">
+      <video
+        ref="videoRef"
+        :src="'/assets/拜一拜/baiyibai.webm'"
+        autoplay
+        muted
+        playsinline
+        @ended="onVideoEnded"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, nextTick, onUnmounted } from 'vue'
 import { useIncenseStore } from '@/stores/incense'
-import lottie from 'lottie-web'
 
 const props = defineProps<{
   godId: string
@@ -28,8 +36,8 @@ const emit = defineEmits<{
 
 const incenseStore = useIncenseStore()
 const isBurning = ref(false)
-const lottieRef = ref<HTMLDivElement | null>(null)
-let lottieInstance: any = null
+const videoRef = ref<HTMLVideoElement | null>(null)
+let timeoutId: number | null = null
 
 const handleIncense = async () => {
   if (isBurning.value) return
@@ -37,68 +45,35 @@ const handleIncense = async () => {
   isBurning.value = true
   incenseStore.addIncense(props.godId)
 
-  // 等待 DOM 更新后启动动画
+  // 等待 DOM 更新后播放视频
   await nextTick()
-  startLottieAnimation()
+  if (videoRef.value) {
+    videoRef.value.play().catch(console.error)
+  }
 
-  // 3秒后结束动画
-  setTimeout(() => {
-    if (lottieInstance) {
-      lottieInstance.destroy()
-      lottieInstance = null
-    }
-    isBurning.value = false
-    emit('complete')
-  }, 3000)
+  // 3秒后结束动画（作为备用，防止 ended 事件未触发）
+  timeoutId = window.setTimeout(() => {
+    endAnimation()
+  }, 3500)
 }
 
-const startLottieAnimation = () => {
-  if (!lottieRef.value) return
+const onVideoEnded = () => {
+  endAnimation()
+}
 
-  // 加载JSON配置
-  fetch('/assets/拜一拜.json')
-    .then(res => res.json())
-    .then(data => {
-      // 修正图片路径和文件名
-      const assetsPath = '/assets/拜一拜/'
-      data.assets = data.assets.map((asset: any) => {
-        if (asset.u && asset.p) {
-          // 将 seq_0_0.png 格式转换为 0001.png 格式
-          const match = asset.p.match(/seq_0_(\d+)\.png/)
-          if (match) {
-            const frameNum = parseInt(match[1]) + 1
-            const newFilename = String(frameNum).padStart(4, '0') + '.png'
-            return {
-              ...asset,
-              u: assetsPath,
-              p: newFilename
-            }
-          }
-          return {
-            ...asset,
-            u: assetsPath
-          }
-        }
-        return asset
-      })
-
-      lottieInstance = lottie.loadAnimation({
-        container: lottieRef.value,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        animationData: data
-      })
-    })
-    .catch(err => {
-      console.error('Failed to load Lottie animation:', err)
-    })
+const endAnimation = () => {
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+    timeoutId = null
+  }
+  isBurning.value = false
+  emit('complete')
 }
 
 onUnmounted(() => {
-  if (lottieInstance) {
-    lottieInstance.destroy()
-    lottieInstance = null
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+    timeoutId = null
   }
 })
 </script>
@@ -216,8 +191,8 @@ button.worship-btn:hover .shimmer::after {
   justify-content: center;
 }
 
-/* Lottie 容器 - 绝对定位不影响布局 */
-.lottie-container {
+/* 视频容器 - 绝对定位不影响布局 */
+.video-container {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -226,6 +201,12 @@ button.worship-btn:hover .shimmer::after {
   height: 400px;
   animation: fadeInOut 3s ease-in-out forwards;
   pointer-events: none;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 @keyframes fadeInOut {

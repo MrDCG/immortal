@@ -8,11 +8,23 @@
     <!-- 光环 -->
     <div class="glow" :style="{ background: glowGradient }"></div>
 
-    <!-- 神仙图片 -->
+    <!-- 神仙视频/图片 -->
     <Transition name="god-fade" mode="out-in">
-      <img
+      <video
+        v-if="god.images.video"
         :key="god.id"
-        :src="currentImage"
+        :src="god.images.video"
+        :poster="god.images.poster"
+        class="god-image"
+        autoplay
+        loop
+        muted
+        playsinline
+      />
+      <img
+        v-else
+        :key="god.id + '-img'"
+        :src="god.images.default"
         :alt="god.name"
         class="god-image"
       />
@@ -32,124 +44,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import type { God } from '@/types'
 import Counter from './Counter.vue'
 import Incense from './Incense.vue'
 import BlessingPopup from './BlessingPopup.vue'
 
 const props = defineProps<{ god: God }>()
-const emit = defineEmits<{
-  keyPress: [direction: 'left' | 'right']
-}>()
 
 const blessingPopupRef = ref<InstanceType<typeof BlessingPopup>>()
-
-// 帧动画相关状态
-const currentFrameIndex = ref(0)
-let animationFrameId: number | null = null
-let lastTimestamp = 0
-
-// 检查是否使用帧动画
-const useFrameAnimation = computed(() => {
-  return props.god.images.frames && props.god.images.frames.length > 0
-})
-
-// 获取当前显示的图片
-const currentImage = computed(() => {
-  if (useFrameAnimation.value && props.god.images.frames) {
-    return props.god.images.frames[currentFrameIndex.value]
-  }
-  return props.god.images.default || ''
-})
 
 // 光环渐变色
 const glowGradient = computed(() => {
   return `radial-gradient(circle, ${props.god.color}40 0%, transparent 60%)`
 })
 
-// 帧动画配置
-const animationConfig = computed(() => {
-  return {
-    fps: props.god.animation?.fps || 12,
-    loop: props.god.animation?.loop !== false,
-  }
-})
-
-// 预加载所有帧图片
-const preloadFrames = () => {
-  if (!useFrameAnimation.value) return
-
-  const frames = props.god.images.frames!
-  frames.forEach((src) => {
-    const img = new Image()
-    img.src = src
-  })
-}
-
-// 帧动画循环
-const animateFrames = (timestamp: number) => {
-  if (!lastTimestamp) lastTimestamp = timestamp
-
-  const elapsed = timestamp - lastTimestamp
-  const frameInterval = 1000 / animationConfig.value.fps
-
-  if (elapsed >= frameInterval) {
-    const frameCount = props.god.images.frames?.length || 1
-    currentFrameIndex.value = (currentFrameIndex.value + 1) % frameCount
-    lastTimestamp = timestamp
-  }
-
-  if (animationConfig.value.loop) {
-    animationFrameId = requestAnimationFrame(animateFrames)
-  }
-}
-
-// 启动帧动画
-const startFrameAnimation = () => {
-  if (!useFrameAnimation.value) return
-
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-  }
-
-  lastTimestamp = 0
-  currentFrameIndex.value = 0
-  animationFrameId = requestAnimationFrame(animateFrames)
-}
-
-// 停止帧动画
-const stopFrameAnimation = () => {
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-    animationFrameId = null
-  }
-}
-
-// 监听神仙切换
-watch(() => props.god, () => {
-  stopFrameAnimation()
-  currentFrameIndex.value = 0
-  if (useFrameAnimation.value) {
-    preloadFrames()
-    startFrameAnimation()
-  }
-})
-
 const showBlessing = () => {
   blessingPopupRef.value?.show()
 }
-
-onMounted(() => {
-  preloadFrames()
-  if (useFrameAnimation.value) {
-    startFrameAnimation()
-  }
-})
-
-onUnmounted(() => {
-  stopFrameAnimation()
-})
 </script>
 
 <style scoped>
@@ -193,7 +105,7 @@ onUnmounted(() => {
   50% { opacity: 1; }
 }
 
-/* 神仙图片 */
+/* 神仙图片/视频 */
 .god-image {
   position: absolute;
   top: 48%;
