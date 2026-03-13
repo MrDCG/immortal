@@ -122,7 +122,7 @@ const showBlessing = () => {
 /* 神仙切换过渡动画 */
 .god-fade-enter-active,
 .god-fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 .god-fade-enter-from {
