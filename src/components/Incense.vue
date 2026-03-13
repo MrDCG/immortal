@@ -100,7 +100,7 @@ onUnmounted(() => {
 /* 拜一拜按钮 */
 button.worship-btn {
   font-weight: 600;
-  background-image: url('/assets/拜一拜.png');
+  background-image: url('/assets/拜一拜.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

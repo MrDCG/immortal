@@ -72,7 +72,7 @@ const showBlessing = () => {
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: url('/assets/画轴背景.png');
+  background-image: url('/assets/画轴背景.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
