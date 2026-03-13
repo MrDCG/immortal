@@ -9,7 +9,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,webp,webm,png,jpg,svg,woff2}'],
+        // 只预缓存小文件（js、css、html）
+        globPatterns: ['**/*.{js,css,html}'],
+        // 媒体资源按需缓存
         runtimeCaching: [
           {
             urlPattern: /\.(?:webm|webp|png|jpg|jpeg|svg)$/i,
@@ -17,8 +19,11 @@ export default defineConfig({
             options: {
               cacheName: 'media-cache',
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 30 * 24 * 60 * 60, // 30天
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
               },
             },
           },

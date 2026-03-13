@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1965b4e-a4c8-4f51-b6e4-482d64f613a1" name="更改" comment="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GodCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GodCard.vue" afterDir="false" />
-    </list>
+    <list default="true" id="e1965b4e-a4c8-4f51-b6e4-482d64f613a1" name="更改" comment="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -191,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773370995144</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置">
+      <option name="closed" value="true" />
+      <created>1773371664205</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773371664205</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,7 +218,8 @@
     <MESSAGE value="chore(deps): 更新依赖包并添加 lottie-web 动画库支持&#10;&#10;- 更新 pinia 依赖包版本及文件哈希值&#10;- 更新 pinia-plugin-persistedstate 插件哈希值&#10;- 更新 vue 运行时库版本及文件哈希值&#10;- 新增 lottie-web 动画库支持及其配置&#10;- 更新依赖管理器元数据和浏览器哈希值&#10;- 添加新的代码块 chunk-BUSYA2B4 配置项" />
     <MESSAGE value="```&#10;chore(deps): 更新依赖包并调整组件尺寸&#10;&#10;- 更新了 pinia、pinia-plugin-persistedstate 和 vue 的依赖版本&#10;- 移除了 lottie-web 依赖包&#10;- 将 Incense 组件的宽度和高度从 400px 调整为 600px&#10;- 更新了 Vite 依赖的哈希值和文件哈希值&#10;```" />
     <MESSAGE value="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度" />
-    <option name="LAST_COMMIT_MESSAGE" value="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度" />
+    <MESSAGE value="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
