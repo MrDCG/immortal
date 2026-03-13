@@ -197,8 +197,8 @@ button.worship-btn:hover .shimmer::after {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 600px;
   animation: fadeInOut 3s ease-in-out forwards;
   pointer-events: none;
 }
