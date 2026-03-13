@@ -9,13 +9,14 @@
     </button>
 
     <!-- 视频动画容器 -->
-    <div v-else class="video-container">
+    <div v-show="isBurning && videoReady" class="video-container">
       <video
         ref="videoRef"
-        :src="'/assets/拜一拜/baiyibai.webm'"
-        autoplay
+        src="/assets/拜一拜/baiyibai.webm"
+        preload="auto"
         muted
         playsinline
+        @canplaythrough="onVideoReady"
         @ended="onVideoEnded"
       />
     </div>
@@ -23,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useIncenseStore } from '@/stores/incense'
 
 const props = defineProps<{
@@ -36,22 +37,38 @@ const emit = defineEmits<{
 
 const incenseStore = useIncenseStore()
 const isBurning = ref(false)
+const videoReady = ref(false)
 const videoRef = ref<HTMLVideoElement | null>(null)
 let timeoutId: number | null = null
 
-const handleIncense = async () => {
+// 组件挂载时预加载视频
+onMounted(() => {
+  if (videoRef.value) {
+    videoRef.value.load()
+  }
+})
+
+const onVideoReady = () => {
+  videoReady.value = true
+  // 如果正在等待播放，立即播放
+  if (isBurning.value && videoRef.value) {
+    videoRef.value.play().catch(console.error)
+  }
+}
+
+const handleIncense = () => {
   if (isBurning.value) return
 
   isBurning.value = true
   incenseStore.addIncense(props.godId)
 
-  // 等待 DOM 更新后播放视频
-  await nextTick()
-  if (videoRef.value) {
+  // 如果视频已准备好，立即播放
+  if (videoReady.value && videoRef.value) {
+    videoRef.value.currentTime = 0
     videoRef.value.play().catch(console.error)
   }
 
-  // 3秒后结束动画（作为备用，防止 ended 事件未触发）
+  // 3.5秒后结束动画（作为备用）
   timeoutId = window.setTimeout(() => {
     endAnimation()
   }, 3500)

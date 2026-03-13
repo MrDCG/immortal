@@ -10,8 +10,8 @@ export const gods: God[] = [
     type: 'wealth',
     images: {
       video: '/assets/gods/bigan/bigan.webm',
-      poster: '/assets/gods/bigan/bigan_00000.png',
-      default: '/assets/gods/bigan/bigan_00000.png',
+      poster: '/assets/gods/bigan/bigan_00000.webp',
+      default: '/assets/gods/bigan/bigan_00000.webp',
     },
     color: '#D4AF37',
     blessings: [
@@ -34,8 +34,8 @@ export const gods: God[] = [
     type: 'wealth',
     images: {
       video: '/assets/gods/guanyu/guanyu.webm',
-      poster: '/assets/gods/guanyu/guanyushenxiang_00000.png',
-      default: '/assets/gods/guanyu/guanyushenxiang_00000.png',
+      poster: '/assets/gods/guanyu/guanyushenxiang_00000.webp',
+      default: '/assets/gods/guanyu/guanyushenxiang_00000.webp',
     },
     color: '#C41E3A',
     blessings: [
@@ -58,8 +58,8 @@ export const gods: God[] = [
     type: 'wealth',
     images: {
       video: '/assets/gods/chaiwangye/chaiwangye.webm',
-      poster: '/assets/gods/chaiwangye/chaiwangye_00000.png',
-      default: '/assets/gods/chaiwangye/chaiwangye_00000.png',
+      poster: '/assets/gods/chaiwangye/chaiwangye_00000.webp',
+      default: '/assets/gods/chaiwangye/chaiwangye_00000.webp',
     },
     color: '#B8860B',
     blessings: [
@@ -82,8 +82,8 @@ export const gods: God[] = [
     type: 'wealth',
     images: {
       video: '/assets/gods/zhaogongming/zhaogongming.webm',
-      poster: '/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.png',
-      default: '/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.png',
+      poster: '/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.webp',
+      default: '/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.webp',
     },
     color: '#2F2F2F',
     blessings: [
@@ -106,8 +106,8 @@ export const gods: God[] = [
     type: 'wealth',
     images: {
       video: '/assets/gods/wanghai/wanghai.webm',
-      poster: '/assets/gods/wanghai/wanghaishenxiang_00000.png',
-      default: '/assets/gods/wanghai/wanghaishenxiang_00000.png',
+      poster: '/assets/gods/wanghai/wanghaishenxiang_00000.webp',
+      default: '/assets/gods/wanghai/wanghaishenxiang_00000.webp',
     },
     color: '#6B3FA0',
     blessings: [
@@ -130,8 +130,8 @@ export const gods: God[] = [
     type: 'love',
     images: {
       video: '/assets/gods/yuelao/yuelao.webm',
-      poster: '/assets/gods/yuelao/yuelao_00000.png',
-      default: '/assets/gods/yuelao/yuelao_00000.png',
+      poster: '/assets/gods/yuelao/yuelao_00000.webp',
+      default: '/assets/gods/yuelao/yuelao_00000.webp',
     },
     color: '#FF69B4',
     blessings: [

@@ -4,12 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1965b4e-a4c8-4f51-b6e4-482d64f613a1" name="更改" comment="chore(dependencies): 移除 lottie-web 依赖并更新包锁定文件&#10;&#10;- 从 node_modules 中完全移除 lottie-web 库文件&#10;- 更新 .package-lock.json 文件以反映依赖关系变更&#10;- 移除 lottie-web 相关的配置文件和文档&#10;- 更新 Vite 依赖元数据以同步优化模块列表&#10;- 清理所有相关的 JSON 模式定义文件">
+    <list default="true" id="e1965b4e-a4c8-4f51-b6e4-482d64f613a1" name="更改" comment="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/拜一拜.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/画轴背景.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GodCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GodCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/gods/bigan/bigan_00000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/gods/chaiwangye/chaiwangye_00000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/gods/guanyu/guanyushenxiang_00000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/gods/wanghai/wanghaishenxiang_00000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/gods/yuelao/yuelao_00000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/gods/zhaogongming/zhaogongmingshenxiang_00000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/拜一拜.webp" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/拜一拜.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/画轴背景.webp" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/画轴背景.webp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Incense.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Incense.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/gods.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/gods.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,11 +45,11 @@
                 <list>
                   <RecentBranch>
                     <option name="branchName" value="polang" />
-                    <option name="lastUsedInstant" value="1773225857" />
+                    <option name="lastUsedInstant" value="1773368293" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="dev" />
-                    <option name="lastUsedInstant" value="1773225856" />
+                    <option name="lastUsedInstant" value="1773368292" />
                   </RecentBranch>
                 </list>
               </option>
@@ -61,36 +72,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;polang&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/polang/work/immortal/image/柴王爷&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\polang\\work\\immortal\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "polang",
+    "go.import.settings.migrated": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/polang/work/immortal/image/月老",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "E:\\polang\\work\\immortal\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\polang\work\immortal\image\柴王爷" />
       <recent name="E:\polang\work\immortal\image\月老" />
       <recent name="E:\polang\work\immortal\image\比干" />
+      <recent name="E:\polang\work\immortal\image\柴王爷" />
       <recent name="E:\polang\work\immortal\image\赵公明" />
       <recent name="E:\polang\work\immortal\image\王亥" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\polang\work\immortal\image\月老" />
+      <recent name="E:\polang\work\immortal\public\assets" />
       <recent name="E:\polang\work\immortal\image\比干" />
       <recent name="E:\polang\work\immortal\image\王亥" />
       <recent name="E:\polang\work\immortal\image\赵公明" />
@@ -112,14 +123,7 @@
       <option name="presentableId" value="Default" />
       <updated>1772194075474</updated>
       <workItem from="1772526526062" duration="2844000" />
-      <workItem from="1772530302986" duration="2016000" />
-      <workItem from="1772594428468" duration="3798000" />
-      <workItem from="1772765739364" duration="227000" />
-      <workItem from="1772774458693" duration="636000" />
-      <workItem from="1773045760674" duration="1108000" />
-      <workItem from="1773193595844" duration="606000" />
-      <workItem from="1773222644132" duration="2212000" />
-      <workItem from="1773278985305" duration="4410000" />
+      <workItem from="1772530302986" duration="1265000" />
     </task>
     <task id="LOCAL-00001" summary="111">
       <option name="closed" value="true" />
@@ -169,23 +173,31 @@
       <option name="project" value="LOCAL" />
       <updated>1772530330363</updated>
     </task>
-    <task id="LOCAL-00007" summary="111">
+    <task id="LOCAL-00007" summary="chore(deps): 更新依赖包并添加 lottie-web 动画库支持&#10;&#10;- 更新 pinia 依赖包版本及文件哈希值&#10;- 更新 pinia-plugin-persistedstate 插件哈希值&#10;- 更新 vue 运行时库版本及文件哈希值&#10;- 新增 lottie-web 动画库支持及其配置&#10;- 更新依赖管理器元数据和浏览器哈希值&#10;- 添加新的代码块 chunk-BUSYA2B4 配置项">
       <option name="closed" value="true" />
-      <created>1772590933925</created>
+      <created>1773368683719</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1772590933925</updated>
+      <updated>1773368683719</updated>
     </task>
-    <task id="LOCAL-00008" summary="chore(dependencies): 移除 lottie-web 依赖并更新包锁定文件&#10;&#10;- 从 node_modules 中完全移除 lottie-web 库文件&#10;- 更新 .package-lock.json 文件以反映依赖关系变更&#10;- 移除 lottie-web 相关的配置文件和文档&#10;- 更新 Vite 依赖元数据以同步优化模块列表&#10;- 清理所有相关的 JSON 模式定义文件">
+    <task id="LOCAL-00008" summary="```&#10;chore(deps): 更新依赖包并调整组件尺寸&#10;&#10;- 更新了 pinia、pinia-plugin-persistedstate 和 vue 的依赖版本&#10;- 移除了 lottie-web 依赖包&#10;- 将 Incense 组件的宽度和高度从 400px 调整为 600px&#10;- 更新了 Vite 依赖的哈希值和文件哈希值&#10;```">
       <option name="closed" value="true" />
-      <created>1773366838261</created>
+      <created>1773368834167</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1773366838261</updated>
+      <updated>1773368834167</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度">
+      <option name="closed" value="true" />
+      <created>1773369018872</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1773369018872</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,8 +216,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="111" />
-    <MESSAGE value="chore(dependencies): 移除 lottie-web 依赖并更新包锁定文件&#10;&#10;- 从 node_modules 中完全移除 lottie-web 库文件&#10;- 更新 .package-lock.json 文件以反映依赖关系变更&#10;- 移除 lottie-web 相关的配置文件和文档&#10;- 更新 Vite 依赖元数据以同步优化模块列表&#10;- 清理所有相关的 JSON 模式定义文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore(dependencies): 移除 lottie-web 依赖并更新包锁定文件&#10;&#10;- 从 node_modules 中完全移除 lottie-web 库文件&#10;- 更新 .package-lock.json 文件以反映依赖关系变更&#10;- 移除 lottie-web 相关的配置文件和文档&#10;- 更新 Vite 依赖元数据以同步优化模块列表&#10;- 清理所有相关的 JSON 模式定义文件" />
+    <MESSAGE value="chore(deps): 更新依赖包并添加 lottie-web 动画库支持&#10;&#10;- 更新 pinia 依赖包版本及文件哈希值&#10;- 更新 pinia-plugin-persistedstate 插件哈希值&#10;- 更新 vue 运行时库版本及文件哈希值&#10;- 新增 lottie-web 动画库支持及其配置&#10;- 更新依赖管理器元数据和浏览器哈希值&#10;- 添加新的代码块 chunk-BUSYA2B4 配置项" />
+    <MESSAGE value="```&#10;chore(deps): 更新依赖包并调整组件尺寸&#10;&#10;- 更新了 pinia、pinia-plugin-persistedstate 和 vue 的依赖版本&#10;- 移除了 lottie-web 依赖包&#10;- 将 Incense 组件的宽度和高度从 400px 调整为 600px&#10;- 更新了 Vite 依赖的哈希值和文件哈希值&#10;```" />
+    <MESSAGE value="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度" />
+    <option name="LAST_COMMIT_MESSAGE" value="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
