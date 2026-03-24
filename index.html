@@ -16,7 +16,7 @@
         var script = document.createElement('script');
         script.async = true;
         script.src = umamiScriptUrl;
-        script.dataset.websiteId = umamiWebsiteId;
+        script.setAttribute('data-website-id', umamiWebsiteId);
         document.head.appendChild(script);
       }
     </script>
