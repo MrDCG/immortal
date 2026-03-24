@@ -1,4 +1,5 @@
 <template>
+  <DanmakuContainer />
   <DailyDirections />
   <GodCard :god="currentGod" @key-press="handleKeyPress" />
   <Navigation
@@ -7,6 +8,7 @@
     @next="nextGod"
     @go-to="goToGod"
   />
+  <DanmakuInput />
 </template>
 
 <script setup lang="ts">
@@ -16,6 +18,8 @@ import { useIncenseStore } from '@/stores/incense'
 import GodCard from './components/GodCard.vue'
 import Navigation from './components/Navigation.vue'
 import DailyDirections from './components/DailyDirections.vue'
+import DanmakuContainer from './components/DanmakuContainer.vue'
+import DanmakuInput from './components/DanmakuInput.vue'
 
 const incenseStore = useIncenseStore()
 
