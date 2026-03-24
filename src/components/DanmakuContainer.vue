@@ -1,41 +1,32 @@
 <template>
   <div class="danmaku-container" v-show="config.enabled">
-    <Transition name="fade">
-      <div v-if="ready" ref="containerRef" class="danmaku-inner">
-        <vue-danmaku
-          ref="danmakuRef"
-          :danmus="danmakuList"
-          :channels="channels"
-          :speeds="config.speed"
-          :is-suspend="false"
-          :loop="true"
-          :auto-resize="true"
-          style="width: 100%; height: 100%;"
-        >
-          <template #danmu="{ danmu }">
-            <span :style="getDanmuStyle(danmu)">{{ danmu.text }}</span>
-          </template>
-        </vue-danmaku>
-      </div>
-    </Transition>
+    <div class="danmaku-wrapper">
+      <vue-danmaku
+        v-model:danmus="danmakuList"
+        ref="danmakuRef"
+        :channels="0"
+        :speeds="config.speed"
+        :autoplay="false"
+        :loop="true"
+        style="width: 100%; height: 100%;"
+      >
+        <template #danmu="{ danmu }">
+          <span :style="getDanmuStyle(danmu)">{{ danmu.text }}</span>
+        </template>
+      </vue-danmaku>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import vueDanmaku from 'vue-danmaku'
 import { useDanmakuStore } from '@/stores/danmaku'
 
 const danmakuStore = useDanmakuStore()
-const containerRef = ref<HTMLElement>()
 const danmakuRef = ref()
-const ready = ref(false)
-
 const config = computed(() => danmakuStore.config)
 const danmakuList = computed(() => danmakuStore.danmakuList)
-
-// 弹幕通道数（根据屏幕高度计算）
-const channels = computed(() => Math.floor(config.value.areaHeight / 25))
 
 // 获取弹幕样式
 const getDanmuStyle = (danmu: any) => ({
@@ -44,36 +35,29 @@ const getDanmuStyle = (danmu: any) => ({
   textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
 })
 
-// 初始化弹幕容器
-const initDanmaku = () => {
-  // 延迟1.5秒后启用，确保页面完全渲染
-  setTimeout(() => {
-    ready.value = true
-    // 等待DOM更新
-    nextTick(() => {
-      setTimeout(() => {
-        if (danmakuRef.value && danmakuRef.value.resize) {
-          try {
-            danmakuRef.value.resize()
-          } catch (e) {
-            console.warn('[Danmaku] resize failed:', e)
-          }
-        }
-      }, 100)
-    })
-  }, 1500)
+// 确保弹幕播放
+const ensurePlay = () => {
+  nextTick(() => {
+    if (danmakuRef.value && danmakuRef.value.play) {
+      try {
+        danmakuRef.value.play()
+      } catch (e) {
+        console.warn('[Danmaku] play failed:', e)
+      }
+    }
+  })
 }
 
-// 组件挂载后初始化
+// 组件挂载后启动弹幕
 onMounted(() => {
-  initDanmaku()
+  // 延迟一点时间确保组件完全挂载
+  setTimeout(ensurePlay, 500)
 })
 
-// 监听配置变化
-watch(() => config.value.areaHeight, () => {
-  ready.value = false
-  setTimeout(initDanmaku, 100)
-})
+// 监听弹幕列表变化，自动播放
+watch(danmakuList, () => {
+  ensurePlay()
+}, { deep: true })
 </script>
 
 <style scoped>
@@ -89,19 +73,8 @@ watch(() => config.value.areaHeight, () => {
   overflow: hidden;
 }
 
-.danmaku-inner {
+.danmaku-wrapper {
   width: 100%;
   height: v-bind('config.areaHeight + "%"');
-  min-height: 200px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
