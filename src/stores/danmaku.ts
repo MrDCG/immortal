@@ -123,28 +123,6 @@ export const useDanmakuStore = defineStore('danmaku', () => {
   // 初始化时加载配置
   loadConfig()
 
-  // 添加欢迎弹幕
-  const welcomeMessages = [
-    '欢迎来到云上香 🙏',
-    '心诚则灵',
-    '愿一切安好',
-    '今日宜祈福',
-    '祈求家人平安'
-  ]
-
-  const addWelcomeDanmaku = () => {
-    if (danmakuList.value.length === 0) {
-      welcomeMessages.forEach((text, index) => {
-        setTimeout(() => {
-          addDanmaku(text)
-        }, index * 1000)
-      })
-    }
-  }
-
-  // 延迟添加欢迎弹幕
-  setTimeout(addWelcomeDanmaku, 2000)
-
   return {
     danmakuList,
     config,

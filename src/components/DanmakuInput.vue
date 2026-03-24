@@ -1,5 +1,5 @@
 <template>
-  <div class="danmaku-input-container" v-show="config.enabled">
+  <div class="danmaku-input-container">
     <div class="input-wrapper">
       <input
         v-model="inputText"
@@ -8,8 +8,9 @@
         class="danmaku-input"
         maxlength="50"
         @keyup.enter="sendDanmaku"
+        :disabled="!config.enabled"
       />
-      <button class="send-btn" @click="sendDanmaku" :disabled="!inputText.trim()">
+      <button class="send-btn" @click="sendDanmaku" :disabled="!inputText.trim() || !config.enabled">
         发送
       </button>
       <button class="settings-btn" @click="showSettings = true" title="弹幕设置">
@@ -22,18 +23,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useDanmakuStore } from '@/stores/danmaku'
 import DanmakuSettings from './DanmakuSettings.vue'
 
 const danmakuStore = useDanmakuStore()
-const config = danmakuStore.config
+const config = computed(() => danmakuStore.config)
 const inputText = ref('')
 const showSettings = ref(false)
 
 const sendDanmaku = () => {
   const text = inputText.value.trim()
-  if (text && config.enabled) {
+  if (text && config.value.enabled) {
     danmakuStore.addDanmaku(text)
     inputText.value = ''
 
@@ -75,6 +76,11 @@ const sendDanmaku = () => {
 
 .danmaku-input:focus {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.danmaku-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .send-btn {

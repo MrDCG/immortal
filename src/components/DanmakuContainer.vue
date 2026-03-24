@@ -9,7 +9,8 @@
           :speeds="config.speed"
           :is-suspend="false"
           :loop="true"
-          :auto-resize="false"
+          :auto-resize="true"
+          style="width: 100%; height: 100%;"
         >
           <template #danmu="{ danmu }">
             <span :style="getDanmuStyle(danmu)">{{ danmu.text }}</span>
@@ -21,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import vueDanmaku from 'vue-danmaku'
 import { useDanmakuStore } from '@/stores/danmaku'
 
@@ -44,18 +45,12 @@ const getDanmuStyle = (danmu: any) => ({
 })
 
 // 初始化弹幕容器
-const initDanmaku = async () => {
-  await nextTick()
-
-  // 等待容器有宽高
-  let attempts = 0
-  const maxAttempts = 50
-
-  const checkContainer = () => {
-    attempts++
-    if (containerRef.value && containerRef.value.offsetWidth > 0 && containerRef.value.offsetHeight > 0) {
-      ready.value = true
-      // 等待 vue-danmaku 渲染后再调整大小
+const initDanmaku = () => {
+  // 延迟1.5秒后启用，确保页面完全渲染
+  setTimeout(() => {
+    ready.value = true
+    // 等待DOM更新
+    nextTick(() => {
       setTimeout(() => {
         if (danmakuRef.value && danmakuRef.value.resize) {
           try {
@@ -65,16 +60,8 @@ const initDanmaku = async () => {
           }
         }
       }, 100)
-    } else if (attempts < maxAttempts) {
-      setTimeout(checkContainer, 50)
-    } else {
-      console.warn('[Danmaku] 容器初始化超时，强制启用')
-      ready.value = true
-    }
-  }
-
-  // 延迟 500ms 后开始检查
-  setTimeout(checkContainer, 500)
+    })
+  }, 1500)
 }
 
 // 组件挂载后初始化
