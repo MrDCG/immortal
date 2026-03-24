@@ -183,22 +183,41 @@ const showBlessing = () => {
   }
 
   .god-image {
-    width: 200px;
-    height: 340px;
-    border-radius: 15px;
+    width: 55vw;
+    max-width: 220px;
+    height: auto;
+    aspect-ratio: 380 / 570;
+    border-radius: 12px;
+    transform: translate(-50%, -50%);
+    top: 45%;
+  }
+
+  .god-fade-enter-from {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+
+  .god-fade-leave-to {
+    transform: translate(-50%, -50%) scale(1.05);
   }
 
   .glow {
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
   }
 
   .actions {
-    bottom: 30px;
+    bottom: 25px;
   }
 
   .god-desc {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    top: auto;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
   }
 }
 </style>

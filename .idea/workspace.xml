@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1965b4e-a4c8-4f51-b6e4-482d64f613a1" name="更改" comment="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置" />
+    <list default="true" id="e1965b4e-a4c8-4f51-b6e4-482d64f613a1" name="更改" comment="feat(pwa): 优化 PWA 缓存策略&#10;&#10;- 调整预缓存模式只缓存核心文件(js、css、html)&#10;- 配置媒体资源按需缓存策略&#10;- 增加媒体缓存最大条目数至 100&#10;- 添加缓存响应状态过滤确保缓存有效性">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DailyDirections.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DailyDirections.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GodCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GodCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Incense.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Incense.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Navigation.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navigation.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +19,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="polang" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -26,6 +32,10 @@
             <RecentBranchesForRepo>
               <option name="branches">
                 <list>
+                  <RecentBranch>
+                    <option name="branchName" value="polang-mobile" />
+                    <option name="lastUsedInstant" value="1773378877" />
+                  </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="polang" />
                     <option name="lastUsedInstant" value="1773368293" />
@@ -55,26 +65,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "polang",
-    "go.import.settings.migrated": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/polang/work/immortal/image/月老",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "E:\\polang\\work\\immortal\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;polang-mobile&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/polang/work/immortal/image/月老&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\polang\\work\\immortal\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\polang\work\immortal\image\月老" />
@@ -107,6 +117,8 @@
       <updated>1772194075474</updated>
       <workItem from="1772526526062" duration="2844000" />
       <workItem from="1772530302986" duration="1265000" />
+      <workItem from="1773378846839" duration="621000" />
+      <workItem from="1773639397236" duration="591000" />
     </task>
     <task id="LOCAL-00001" summary="111">
       <option name="closed" value="true" />
@@ -196,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773371664205</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feat(pwa): 优化 PWA 缓存策略&#10;&#10;- 调整预缓存模式只缓存核心文件(js、css、html)&#10;- 配置媒体资源按需缓存策略&#10;- 增加媒体缓存最大条目数至 100&#10;- 添加缓存响应状态过滤确保缓存有效性">
+      <option name="closed" value="true" />
+      <created>1773372384744</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1773372384744</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,7 +239,8 @@
     <MESSAGE value="```&#10;chore(deps): 更新依赖包并调整组件尺寸&#10;&#10;- 更新了 pinia、pinia-plugin-persistedstate 和 vue 的依赖版本&#10;- 移除了 lottie-web 依赖包&#10;- 将 Incense 组件的宽度和高度从 400px 调整为 600px&#10;- 更新了 Vite 依赖的哈希值和文件哈希值&#10;```" />
     <MESSAGE value="perf(GodCard): 优化神仙切换过渡动画性能&#10;&#10;- 将过渡动画时间从 0.3s 调整为 0.15s，提升响应速度&#10;- 保持原有的透明度和变换效果&#10;- 减少动画延迟提升用户体验流畅度" />
     <MESSAGE value="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(GodCard): 添加视频播放速率控制功能&#10;&#10;- 为视频元素添加 ref 引用以支持播放速率控制&#10;- 新增 slowPlaybackGods 配置对象用于指定特定神像的播放速度&#10;- 实现 setPlaybackRate 方法动态调整视频播放速率&#10;- 为柴王爷和王亥设置 0.7 倍播放速度实现慢动作效果&#10;- 添加 loadedmetadata 事件监听器确保视频加载后应用播放速率&#10;- 移除不必要的 poster 属性简化视频配置" />
+    <MESSAGE value="feat(pwa): 优化 PWA 缓存策略&#10;&#10;- 调整预缓存模式只缓存核心文件(js、css、html)&#10;- 配置媒体资源按需缓存策略&#10;- 增加媒体缓存最大条目数至 100&#10;- 添加缓存响应状态过滤确保缓存有效性" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(pwa): 优化 PWA 缓存策略&#10;&#10;- 调整预缓存模式只缓存核心文件(js、css、html)&#10;- 配置媒体资源按需缓存策略&#10;- 增加媒体缓存最大条目数至 100&#10;- 添加缓存响应状态过滤确保缓存有效性" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>

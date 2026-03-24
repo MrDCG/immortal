@@ -186,22 +186,23 @@ const goToGod = (index: number) => {
   }
 
   .nav-btn {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
+    opacity: 0.7;
   }
 
   .nav-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 
   .god-indicators {
-    bottom: 90px;
+    bottom: 70px;
   }
 
   .indicator {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
 }
 </style>

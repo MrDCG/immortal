@@ -244,4 +244,25 @@ button.worship-btn:hover .shimmer::after {
     transform: translate(-50%, -50%) scale(0.8);
   }
 }
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .video-container {
+    width: 80vw;
+    height: 80vw;
+    max-width: 350px;
+    max-height: 350px;
+  }
+
+  button.worship-btn {
+    width: 110px;
+    height: 36px;
+    border-radius: 16px;
+  }
+
+  .incense-container {
+    width: 110px;
+    height: 36px;
+  }
+}
 </style>

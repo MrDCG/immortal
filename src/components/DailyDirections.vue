@@ -134,21 +134,38 @@ const guishenColor = computed(() => getDirectionColor(directions.guishen))
 /* 响应式 */
 @media (max-width: 768px) {
   .daily-directions {
-    top: 10px;
+    top: auto;
+    bottom: 10px;
     left: 10px;
+    right: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
   }
-  
+
   .direction-item {
-    padding: 8px 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    gap: 6px;
   }
-  
+
   .direction-icon {
-    font-size: 18px;
-    min-width: 28px;
-  }
-  
-  .direction-value {
     font-size: 14px;
+    min-width: 24px;
+  }
+
+  .direction-label {
+    font-size: 10px;
+  }
+
+  .direction-value {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .day-stem {
+    display: none;
   }
 }
 </style>
