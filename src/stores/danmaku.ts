@@ -8,6 +8,7 @@ export interface Danmaku {
   fontSize: number
   speed: number
   timestamp: number
+  isHistory?: boolean
 }
 
 export interface DanmakuConfig {
@@ -55,8 +56,13 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     '#FF69B4', '#90EE90'
   ]
 
-  // WebSocket 连接
-  let socket: any = null
+  // 清空回调
+  let clearCallback: (() => void) | null = null
+
+  // 注册清空回调
+  const registerClearCallback = (callback: () => void) => {
+    clearCallback = callback
+  }
 
   // 获取弹幕颜色
   const getDanmakuColor = () => {
@@ -72,6 +78,9 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     }
   }
 
+  // WebSocket 连接
+  let socket: any = null
+
   // 连接 WebSocket
   const connectWebSocket = async () => {
     try {
@@ -84,8 +93,6 @@ export const useDanmakuStore = defineStore('danmaku', () => {
 
       socket.on('connected', (data: any) => {
         console.log('[Danmaku]', data.message)
-        // 连接成功后，获取历史弹幕
-        fetchHistoryDanmaku()
       })
 
       // 接收新弹幕
@@ -99,7 +106,8 @@ export const useDanmakuStore = defineStore('danmaku', () => {
           color: danmaku.color,
           fontSize: danmaku.font_size * config.fontSizeScale,
           speed: danmaku.speed * config.speedScale,
-          timestamp: new Date(danmaku.created_at).getTime()
+          timestamp: new Date(danmaku.created_at).getTime(),
+          isHistory: false
         }
 
         danmakuList.value.push(newDanmaku)
@@ -129,14 +137,15 @@ export const useDanmakuStore = defineStore('danmaku', () => {
       const result = await response.json()
 
       if (result.success) {
-        // 转换为前端格式
+        // 转换为前端格式，标记为历史弹幕
         const historyDanmakus = result.data.map((d: any) => ({
           id: d.id.toString(),
           text: d.text,
           color: d.color,
           fontSize: d.font_size * config.fontSizeScale,
           speed: d.speed * config.speedScale,
-          timestamp: new Date(d.created_at).getTime()
+          timestamp: new Date(d.created_at).getTime(),
+          isHistory: true // 标记为历史弹幕
         }))
 
         danmakuList.value = historyDanmakus
@@ -181,6 +190,10 @@ export const useDanmakuStore = defineStore('danmaku', () => {
   // 清空弹幕
   const clearDanmaku = () => {
     danmakuList.value = []
+    // 调用注册的清空回调
+    if (clearCallback) {
+      clearCallback()
+    }
   }
 
   // 更新配置
@@ -207,6 +220,7 @@ export const useDanmakuStore = defineStore('danmaku', () => {
   const init = async () => {
     loadConfig()
     await connectWebSocket()
+    await fetchHistoryDanmaku()
   }
 
   // 清理
@@ -231,6 +245,7 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     connectWebSocket,
     fetchHistoryDanmaku,
     init,
-    cleanup
+    cleanup,
+    registerClearCallback
   }
 })

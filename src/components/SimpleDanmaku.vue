@@ -15,9 +15,9 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
-import { useDanmakuStore } from '@/stores/danmaku'
+import { useDanmakuStore, type Danmaku } from '@/stores/danmaku'
 
-interface DanmakuItem {
+interface VisibleDanmaku {
   id: string
   text: string
   color: string
@@ -31,7 +31,7 @@ const danmakuStore = useDanmakuStore()
 const config = computed(() => danmakuStore.config)
 const danmakuList = computed(() => danmakuStore.danmakuList)
 
-const visibleDanmakus = ref<DanmakuItem[]>([])
+const visibleDanmakus = ref<VisibleDanmaku[]>([])
 const lastListLength = ref(0)
 const animationFrameId = ref<number | null>(null)
 
@@ -41,7 +41,7 @@ const wrapperStyle = computed(() => ({
 }))
 
 // 获取弹幕样式
-const getDanmakuStyle = (item: DanmakuItem) => ({
+const getDanmakuStyle = (item: VisibleDanmaku) => ({
   left: `${item.left}px`,
   top: `${item.top}px`,
   color: item.color,
@@ -49,9 +49,15 @@ const getDanmakuStyle = (item: DanmakuItem) => ({
   textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
 })
 
-// 添加弹幕到可见列表
-const addVisibleDanmaku = (danmaku: any) => {
-  const item: DanmakuItem = {
+// 添加弹幕到可见列表（只处理非历史弹幕）
+const addVisibleDanmaku = (danmaku: Danmaku) => {
+  // 跳过历史弹幕
+  if (danmaku.isHistory) {
+    console.log('[SimpleDanmaku] 跳过历史弹幕:', danmaku.text)
+    return
+  }
+
+  const item: VisibleDanmaku = {
     id: danmaku.id,
     text: danmaku.text,
     color: danmaku.color,
@@ -61,6 +67,7 @@ const addVisibleDanmaku = (danmaku: any) => {
     top: Math.random() * (window.innerHeight * config.value.areaHeight / 100 - 40)
   }
   visibleDanmakus.value.push(item)
+  console.log('[SimpleDanmaku] 添加新弹幕:', danmaku.text)
 }
 
 // 更新弹幕位置
@@ -93,12 +100,20 @@ const updateDanmakuPositions = () => {
   animationFrameId.value = requestAnimationFrame(updateDanmakuPositions)
 }
 
+// 清空可见弹幕
+const clearVisibleDanmaku = () => {
+  visibleDanmakus.value = []
+  console.log('[SimpleDanmaku] 已清空可见弹幕')
+}
+
 // 组件挂载
 onMounted(() => {
+  // 注册清空回调
+  danmakuStore.registerClearCallback(clearVisibleDanmaku)
+
   // 开始动画循环
   animationFrameId.value = requestAnimationFrame(updateDanmakuPositions)
-
-  console.log('[SimpleDanmaku] 组件已挂载，弹幕列表长度:', danmakuList.value.length)
+  console.log('[SimpleDanmaku] 组件已挂载')
 })
 
 // 组件卸载
