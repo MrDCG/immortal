@@ -1,22 +1,20 @@
 <template>
   <div class="danmaku-container" v-show="config.enabled">
     <div class="danmaku-wrapper" :style="wrapperStyle">
-      <TransitionGroup name="danmaku">
-        <div
-          v-for="item in visibleDanmakus"
-          :key="item.id"
-          class="danmaku-item"
-          :style="getDanmakuStyle(item)"
-        >
-          {{ item.text }}
-        </div>
-      </TransitionGroup>
+      <div
+        v-for="item in visibleDanmakus"
+        :key="item.id"
+        class="danmaku-item"
+        :style="getDanmakuStyle(item)"
+      >
+        {{ item.text }}
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useDanmakuStore } from '@/stores/danmaku'
 
 interface DanmakuItem {
@@ -27,7 +25,6 @@ interface DanmakuItem {
   speed: number
   left: number
   top: number
-  visible: boolean
 }
 
 const danmakuStore = useDanmakuStore()
@@ -35,9 +32,8 @@ const config = computed(() => danmakuStore.config)
 const danmakuList = computed(() => danmakuStore.danmakuList)
 
 const visibleDanmakus = ref<DanmakuItem[]>([])
+const lastListLength = ref(0)
 const animationFrameId = ref<number | null>(null)
-const containerWidth = ref(window.innerWidth)
-const containerHeight = ref(window.innerHeight)
 
 // 计算容器样式
 const wrapperStyle = computed(() => ({
@@ -53,17 +49,16 @@ const getDanmakuStyle = (item: DanmakuItem) => ({
   textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
 })
 
-// 添加弹幕
-const addVisibleDanmaku = (text: string, color: string, fontSize: number, speed: number) => {
+// 添加弹幕到可见列表
+const addVisibleDanmaku = (danmaku: any) => {
   const item: DanmakuItem = {
-    id: Date.now() + Math.random().toString(36).substr(2, 9),
-    text,
-    color,
-    fontSize,
-    speed,
-    left: containerWidth.value,
-    top: Math.random() * (containerHeight.value * config.value.areaHeight / 100 - 30),
-    visible: true
+    id: danmaku.id,
+    text: danmaku.text,
+    color: danmaku.color,
+    fontSize: danmaku.fontSize,
+    speed: danmaku.speed,
+    left: window.innerWidth,
+    top: Math.random() * (window.innerHeight * config.value.areaHeight / 100 - 40)
   }
   visibleDanmakus.value.push(item)
 }
@@ -76,7 +71,7 @@ const updateDanmakuPositions = () => {
     item.left -= item.speed
 
     // 如果弹幕移出屏幕左侧，标记为移除
-    if (item.left < -200) {
+    if (item.left < -300) {
       itemsToRemove.push(item.id)
     }
   })
@@ -86,25 +81,24 @@ const updateDanmakuPositions = () => {
     visibleDanmakus.value = visibleDanmakus.value.filter(item => !itemsToRemove.includes(item.id))
   }
 
+  // 检查是否有新弹幕添加到 store
+  if (danmakuList.value.length > lastListLength.value) {
+    // 添加新弹幕
+    for (let i = lastListLength.value; i < danmakuList.value.length; i++) {
+      addVisibleDanmaku(danmakuList.value[i])
+    }
+    lastListLength.value = danmakuList.value.length
+  }
+
   animationFrameId.value = requestAnimationFrame(updateDanmakuPositions)
 }
-
-// 监听弹幕列表变化
-watch(danmakuList, (newList, oldList) => {
-  // 如果有新弹幕添加
-  if (newList.length > (oldList?.length || 0)) {
-    const newItem = newList[newList.length - 1]
-    addVisibleDanmaku(newItem.text, newItem.color, newItem.fontSize, newItem.speed)
-  }
-}, { deep: true })
 
 // 组件挂载
 onMounted(() => {
   // 开始动画循环
   animationFrameId.value = requestAnimationFrame(updateDanmakuPositions)
 
-  // 监听窗口大小变化
-  window.addEventListener('resize', handleResize)
+  console.log('[SimpleDanmaku] 组件已挂载，弹幕列表长度:', danmakuList.value.length)
 })
 
 // 组件卸载
@@ -112,14 +106,7 @@ onBeforeUnmount(() => {
   if (animationFrameId.value) {
     cancelAnimationFrame(animationFrameId.value)
   }
-  window.removeEventListener('resize', handleResize)
 })
-
-// 处理窗口大小变化
-const handleResize = () => {
-  containerWidth.value = window.innerWidth
-  containerHeight.value = window.innerHeight
-}
 </script>
 
 <style scoped>
@@ -146,22 +133,5 @@ const handleResize = () => {
   white-space: nowrap;
   font-weight: 500;
   will-change: transform;
-}
-
-.danmaku-enter-active {
-  transition: all 0.1s ease-out;
-}
-
-.danmaku-leave-active {
-  transition: all 0.1s ease-in;
-}
-
-.danmaku-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-
-.danmaku-leave-to {
-  opacity: 0;
 }
 </style>
