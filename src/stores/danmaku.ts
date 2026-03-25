@@ -55,23 +55,8 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     '#FF69B4', '#90EE90'
   ]
 
-  // 添加弹幕
-  const addDanmaku = (text: string) => {
-    const danmaku: Danmaku = {
-      id: Date.now() + Math.random().toString(36).substr(2, 9),
-      text,
-      color: getDanmakuColor(),
-      fontSize: 24 * config.fontSizeScale,
-      speed: 5 * config.speedScale,
-      timestamp: Date.now()
-    }
-    danmakuList.value.push(danmaku)
-
-    // 限制弹幕数量
-    if (danmakuList.value.length > config.maxCount) {
-      danmakuList.value = danmakuList.value.slice(-config.maxCount)
-    }
-  }
+  // WebSocket 连接
+  let socket: any = null
 
   // 获取弹幕颜色
   const getDanmakuColor = () => {
@@ -84,6 +69,104 @@ export const useDanmakuStore = defineStore('danmaku', () => {
         return config.customColor
       default:
         return '#FFFFFF'
+    }
+  }
+
+  // 连接 WebSocket
+  const connectWebSocket = async () => {
+    try {
+      const { io } = await import('socket.io-client')
+      socket = io('http://156.238.254.48:3002')
+
+      socket.on('connect', () => {
+        console.log('[Danmaku] WebSocket 连接成功')
+      })
+
+      socket.on('connected', (data: any) => {
+        console.log('[Danmaku]', data.message)
+        // 连接成功后，获取历史弹幕
+        fetchHistoryDanmaku()
+      })
+
+      // 接收新弹幕
+      socket.on('new_danmaku', (danmaku: any) => {
+        console.log('[Danmaku] 收到新弹幕:', danmaku.text)
+
+        // 转换为前端格式
+        const newDanmaku: Danmaku = {
+          id: danmaku.id.toString(),
+          text: danmaku.text,
+          color: danmaku.color,
+          fontSize: danmaku.font_size * config.fontSizeScale,
+          speed: danmaku.speed * config.speedScale,
+          timestamp: new Date(danmaku.created_at).getTime()
+        }
+
+        danmakuList.value.push(newDanmaku)
+
+        // 限制弹幕数量
+        if (danmakuList.value.length > config.maxCount) {
+          danmakuList.value = danmakuList.value.slice(-config.maxCount)
+        }
+      })
+
+      socket.on('error', (error: any) => {
+        console.error('[Danmaku] WebSocket 错误:', error)
+      })
+
+      socket.on('disconnect', () => {
+        console.log('[Danmaku] WebSocket 断开连接')
+      })
+    } catch (error) {
+      console.error('[Danmaku] 连接 WebSocket 失败:', error)
+    }
+  }
+
+  // 获取历史弹幕
+  const fetchHistoryDanmaku = async () => {
+    try {
+      const response = await fetch('http://156.238.254.48:3002/api/danmaku')
+      const result = await response.json()
+
+      if (result.success) {
+        // 转换为前端格式
+        const historyDanmakus = result.data.map((d: any) => ({
+          id: d.id.toString(),
+          text: d.text,
+          color: d.color,
+          fontSize: d.font_size * config.fontSizeScale,
+          speed: d.speed * config.speedScale,
+          timestamp: new Date(d.created_at).getTime()
+        }))
+
+        danmakuList.value = historyDanmakus
+        console.log(`[Danmaku] 加载了 ${historyDanmakus.length} 条历史弹幕`)
+      }
+    } catch (error) {
+      console.error('[Danmaku] 获取历史弹幕失败:', error)
+    }
+  }
+
+  // 添加弹幕（发送到服务器）
+  const addDanmaku = async (text: string) => {
+    try {
+      if (!socket || !socket.connected) {
+        console.warn('[Danmaku] WebSocket 未连接')
+        return
+      }
+
+      const danmakuData = {
+        text,
+        color: getDanmakuColor(),
+        fontSize: Math.round(24 * config.fontSizeScale),
+        speed: Math.round(5 * config.speedScale)
+      }
+
+      // 发送到服务器
+      socket.emit('send_danmaku', danmakuData)
+      console.log('[Danmaku] 发送弹幕:', text)
+    } catch (error) {
+      console.error('[Danmaku] 发送弹幕失败:', error)
     }
   }
 
@@ -120,6 +203,20 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     }
   }
 
+  // 初始化
+  const init = async () => {
+    loadConfig()
+    await connectWebSocket()
+  }
+
+  // 清理
+  const cleanup = () => {
+    if (socket) {
+      socket.disconnect()
+      socket = null
+    }
+  }
+
   // 初始化时加载配置
   loadConfig()
 
@@ -130,6 +227,10 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     removeDanmaku,
     clearDanmaku,
     updateConfig,
-    getDanmakuColor
+    getDanmakuColor,
+    connectWebSocket,
+    fetchHistoryDanmaku,
+    init,
+    cleanup
   }
 })

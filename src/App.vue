@@ -15,6 +15,7 @@
 import { computed, onMounted, onUnmounted } from 'vue'
 import { gods, defaultGodIndex } from './data/gods'
 import { useIncenseStore } from '@/stores/incense'
+import { useDanmakuStore } from '@/stores/danmaku'
 import GodCard from './components/GodCard.vue'
 import Navigation from './components/Navigation.vue'
 import DailyDirections from './components/DailyDirections.vue'
@@ -22,6 +23,7 @@ import SimpleDanmaku from './components/SimpleDanmaku.vue'
 import DanmakuInput from './components/DanmakuInput.vue'
 
 const incenseStore = useIncenseStore()
+const danmakuStore = useDanmakuStore()
 
 // 初始化神仙索引
 incenseStore.setCurrentGodIndex(defaultGodIndex)
@@ -64,10 +66,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
+  // 初始化弹幕 WebSocket 连接
+  danmakuStore.init()
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
+  // 清理弹幕 WebSocket 连接
+  danmakuStore.cleanup()
 })
 </script>
 
