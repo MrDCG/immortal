@@ -154,8 +154,9 @@ const clearDanmaku = () => {
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 20px;
   z-index: 2000;
 }
 
@@ -167,6 +168,18 @@ const clearDanmaku = () => {
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .settings-header {
@@ -175,6 +188,10 @@ const clearDanmaku = () => {
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
 }
 
 .settings-header h3 {
@@ -285,6 +302,7 @@ const clearDanmaku = () => {
 @media (max-width: 768px) {
   .settings-panel {
     width: 95%;
+    max-width: 350px;
   }
 
   .setting-label {
