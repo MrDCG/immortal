@@ -103,7 +103,7 @@ const updateDanmakuPositions = () => {
 
       // 如果是历史弹幕，检查是否到达显示时间
       if (danmaku.isHistory && danmaku.displayDelay) {
-        if (now >= danmaku.addedTime + danmaku.displayDelay) {
+        if (now >= danmaku.timestamp + danmaku.displayDelay) {
           addVisibleDanmaku(danmaku)
         }
       } else {
