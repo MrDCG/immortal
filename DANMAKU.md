@@ -28,8 +28,8 @@
 
 ## 技术实现
 
-### 前端库
-- **vue-danmaku**：弹幕渲染组件（官方推荐库）
+### 前端实现
+- **自定义弹幕组件**：使用 Vue 3 + requestAnimationFrame 实现平滑动画
 - **Pinia**：状态管理，持久化配置到 localStorage
 
 ### 文件结构
