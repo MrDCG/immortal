@@ -25,13 +25,16 @@ interface VisibleDanmaku {
   speed: number
   left: number
   top: number
+  addedTime: number // 添加到可见列表的时间戳
 }
 
 const danmakuStore = useDanmakuStore()
 const config = computed(() => danmakuStore.config)
 const danmakuList = computed(() => danmakuStore.danmakuList)
+const historyDanmakuList = computed(() => danmakuStore.historyDanmakuList)
 
 const visibleDanmakus = ref<VisibleDanmaku[]>([])
+const processedHistory = ref<Set<string>>(new Set()) // 记录已处理的历史弹幕ID
 const lastListLength = ref(0)
 const animationFrameId = ref<number | null>(null)
 
@@ -49,14 +52,8 @@ const getDanmakuStyle = (item: VisibleDanmaku) => ({
   textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
 })
 
-// 添加弹幕到可见列表（只处理非历史弹幕）
+// 添加弹幕到可见列表
 const addVisibleDanmaku = (danmaku: Danmaku) => {
-  // 跳过历史弹幕
-  if (danmaku.isHistory) {
-    console.log('[SimpleDanmaku] 跳过历史弹幕:', danmaku.text)
-    return
-  }
-
   const item: VisibleDanmaku = {
     id: danmaku.id,
     text: danmaku.text,
@@ -64,15 +61,18 @@ const addVisibleDanmaku = (danmaku: Danmaku) => {
     fontSize: danmaku.fontSize,
     speed: danmaku.speed,
     left: window.innerWidth,
-    top: Math.random() * (window.innerHeight * config.value.areaHeight / 100 - 40)
+    top: Math.random() * (window.innerHeight * config.value.areaHeight / 100 - 40),
+    addedTime: Date.now()
   }
   visibleDanmakus.value.push(item)
-  console.log('[SimpleDanmaku] 添加新弹幕:', danmaku.text)
+  processedHistory.value.add(danmaku.id)
+  console.log('[SimpleDanmaku] 添加弹幕:', danmaku.text, danmaku.isHistory ? '(历史)' : '(新)')
 }
 
 // 更新弹幕位置
 const updateDanmakuPositions = () => {
   const itemsToRemove: string[] = []
+  const now = Date.now()
 
   visibleDanmakus.value.forEach(item => {
     item.left -= item.speed
@@ -86,13 +86,30 @@ const updateDanmakuPositions = () => {
   // 移除出屏幕的弹幕
   if (itemsToRemove.length > 0) {
     visibleDanmakus.value = visibleDanmakus.value.filter(item => !itemsToRemove.includes(item.id))
+    // 从已处理历史中移除
+    itemsToRemove.forEach(id => processedHistory.value.delete(id))
   }
 
   // 检查是否有新弹幕添加到 store
   if (danmakuList.value.length > lastListLength.value) {
     // 添加新弹幕
     for (let i = lastListLength.value; i < danmakuList.value.length; i++) {
-      addVisibleDanmaku(danmakuList.value[i])
+      const danmaku = danmakuList.value[i]
+
+      // 跳过已处理的历史弹幕
+      if (danmaku.isHistory && processedHistory.value.has(danmaku.id)) {
+        continue
+      }
+
+      // 如果是历史弹幕，检查是否到达显示时间
+      if (danmaku.isHistory && danmaku.displayDelay) {
+        if (now >= danmaku.addedTime + danmaku.displayDelay) {
+          addVisibleDanmaku(danmaku)
+        }
+      } else {
+        // 新弹幕直接显示
+        addVisibleDanmaku(danmaku)
+      }
     }
     lastListLength.value = danmakuList.value.length
   }
@@ -103,13 +120,19 @@ const updateDanmakuPositions = () => {
 // 清空可见弹幕
 const clearVisibleDanmaku = () => {
   visibleDanmakus.value = []
-  console.log('[SimpleDanmaku] 已清空可见弹幕')
+  processedHistory.value.clear()
+  // 重置 lastListLength 为历史弹幕数量，以便重新显示
+  lastListLength.value = historyDanmakuList.value.length
+  console.log('[SimpleDanmaku] 已清空可见弹幕，准备重新显示历史弹幕')
 }
 
 // 组件挂载
 onMounted(() => {
   // 注册清空回调
   danmakuStore.registerClearCallback(clearVisibleDanmaku)
+
+  // 初始化 lastListLength
+  lastListLength.value = danmakuList.value.length
 
   // 开始动画循环
   animationFrameId.value = requestAnimationFrame(updateDanmakuPositions)

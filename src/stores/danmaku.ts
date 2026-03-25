@@ -9,6 +9,7 @@ export interface Danmaku {
   speed: number
   timestamp: number
   isHistory?: boolean
+  displayDelay?: number // 历史弹幕的显示延迟时间
 }
 
 export interface DanmakuConfig {
@@ -35,6 +36,9 @@ export interface DanmakuConfig {
 export const useDanmakuStore = defineStore('danmaku', () => {
   // 弹幕列表
   const danmakuList = ref<Danmaku[]>([])
+
+  // 历史弹幕列表（只加载，不直接显示）
+  const historyDanmakuList = ref<Danmaku[]>([])
 
   // 弹幕配置
   const config = reactive<DanmakuConfig>({
@@ -136,18 +140,21 @@ export const useDanmakuStore = defineStore('danmaku', () => {
       const response = await fetch('http://156.238.254.48:3002/api/danmaku')
       const result = await response.json()
 
-      if (result.success) {
+      if (result.success && result.data.length > 0) {
         // 转换为前端格式，标记为历史弹幕
-        const historyDanmakus = result.data.map((d: any) => ({
+        const historyDanmakus = result.data.map((d: any, index: number) => ({
           id: d.id.toString(),
           text: d.text,
           color: d.color,
           fontSize: d.font_size * config.fontSizeScale,
           speed: d.speed * config.speedScale,
           timestamp: new Date(d.created_at).getTime(),
-          isHistory: true // 标记为历史弹幕
+          isHistory: true,
+          // 为历史弹幕设置分批显示的延迟时间（2-10秒之间）
+          displayDelay: 2000 + (index * 300)
         }))
 
+        historyDanmakuList.value = historyDanmakus
         danmakuList.value = historyDanmakus
         console.log(`[Danmaku] 加载了 ${historyDanmakus.length} 条历史弹幕`)
       }
@@ -189,7 +196,8 @@ export const useDanmakuStore = defineStore('danmaku', () => {
 
   // 清空弹幕
   const clearDanmaku = () => {
-    danmakuList.value = []
+    // 只清空可见弹幕，保留历史弹幕记录
+    danmakuList.value = [...historyDanmakuList.value]
     // 调用注册的清空回调
     if (clearCallback) {
       clearCallback()
@@ -236,6 +244,7 @@ export const useDanmakuStore = defineStore('danmaku', () => {
 
   return {
     danmakuList,
+    historyDanmakuList,
     config,
     addDanmaku,
     removeDanmaku,
