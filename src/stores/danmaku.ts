@@ -40,6 +40,9 @@ export const useDanmakuStore = defineStore('danmaku', () => {
   // 历史弹幕列表（只加载，不直接显示）
   const historyDanmakuList = ref<Danmaku[]>([])
 
+  // 待处理的弹幕（用于防重复）
+  const pendingDanmakus = ref<Set<string>>(new Set())
+
   // 弹幕配置
   const config = reactive<DanmakuConfig>({
     enabled: true,
@@ -89,7 +92,9 @@ export const useDanmakuStore = defineStore('danmaku', () => {
   const connectWebSocket = async () => {
     try {
       const { io } = await import('socket.io-client')
-      socket = io('http://156.238.254.48:3002')
+      socket = io('', { // 使用相对路径，通过 nginx 反向代理
+        path: '/socket.io/'
+      })
 
       socket.on('connect', () => {
         console.log('[Danmaku] WebSocket 连接成功')
@@ -102,6 +107,18 @@ export const useDanmakuStore = defineStore('danmaku', () => {
       // 接收新弹幕
       socket.on('new_danmaku', (danmaku: any) => {
         console.log('[Danmaku] 收到新弹幕:', danmaku.text)
+
+        // 检查是否是本地发送的弹幕（通过文本和时间戳判断）
+        const now = Date.now()
+        const isLocal = now - new Date(danmaku.created_at).getTime() < 2000 &&
+                         pendingDanmakus.value.has(danmaku.text)
+
+        if (isLocal) {
+          // 是本地发送的弹幕，从待处理列表中移除
+          pendingDanmakus.value.delete(danmaku.text)
+          console.log('[Danmaku] 跳过本地弹幕重复添加')
+          return
+        }
 
         // 转换为前端格式
         const newDanmaku: Danmaku = {
@@ -134,29 +151,49 @@ export const useDanmakuStore = defineStore('danmaku', () => {
     }
   }
 
-  // 获取历史弹幕
+  // 获取历史弹幕（方案一：优化加载间隔 + 随机错开，避免整齐出现）
   const fetchHistoryDanmaku = async () => {
     try {
-      const response = await fetch('http://156.238.254.48:3002/api/danmaku')
+      const response = await fetch('/api/danmaku') // 使用相对路径，通过 nginx 反向代理
       const result = await response.json()
 
       if (result.success && result.data.length > 0) {
+        // ⭐ 从 localStorage 读取加载间隔配置（默认500ms）
+        const savedConfig = localStorage.getItem('danmaku-collision-config')
+        let intervalDelay = 500 // 默认值
+        if (savedConfig) {
+          try {
+            const parsed = JSON.parse(savedConfig)
+            intervalDelay = parsed.loadInterval || 500
+          } catch (e) {
+            console.error('Failed to parse collision config:', e)
+          }
+        }
+        
+        const baseDelay = 2000 // 基础延迟2秒
+        
         // 转换为前端格式，标记为历史弹幕
-        const historyDanmakus = result.data.map((d: any, index: number) => ({
-          id: d.id.toString(),
-          text: d.text,
-          color: d.color,
-          fontSize: d.font_size * config.fontSizeScale,
-          speed: d.speed * config.speedScale,
-          timestamp: new Date(d.created_at).getTime(),
-          isHistory: true,
-          // 为历史弹幕设置分批显示的延迟时间（2-10秒之间）
-          displayDelay: 2000 + (index * 300)
-        }))
+        const historyDanmakus = result.data.map((d: any, index: number) => {
+          // ⭐ 关键优化：为每条弹幕添加随机延迟（0-2000ms），让错开效果更明显
+          const randomDelay = Math.random() * 2000 // 随机延迟0-2000ms（2秒范围）
+          
+          return {
+            id: d.id.toString(),
+            text: d.text,
+            color: d.color,
+            fontSize: d.font_size * config.fontSizeScale,
+            speed: d.speed * config.speedScale,
+            timestamp: new Date(d.created_at).getTime(),
+            isHistory: true,
+            // ⭐ 使用动态配置的间隔 + 大范围随机延迟，让弹幕明显错开
+            displayDelay: baseDelay + (index * intervalDelay) + randomDelay
+          }
+        })
 
         historyDanmakuList.value = historyDanmakus
         danmakuList.value = historyDanmakus
-        console.log(`[Danmaku] 加载了 ${historyDanmakus.length} 条历史弹幕`)
+        console.log(`[Danmaku] 加载了 ${historyDanmakus.length} 条历史弹幕，间隔: ${intervalDelay}ms + 随机0-500ms`)
+        console.log(`[Danmaku] 预计最后一条弹幕显示时间: ${(baseDelay + (historyDanmakus.length - 1) * intervalDelay + 500) / 1000}秒后`)
       }
     } catch (error) {
       console.error('[Danmaku] 获取历史弹幕失败:', error)
@@ -178,9 +215,37 @@ export const useDanmakuStore = defineStore('danmaku', () => {
         speed: Math.round(5 * config.speedScale)
       }
 
+      // 将弹幕文本添加到待处理列表
+      pendingDanmakus.value.add(text)
+
+      // 立即在本地显示弹幕（无需等待服务器返回）
+      const localDanmaku: Danmaku = {
+        id: `local_${Date.now()}_${Math.random()}`,
+        text: text,
+        color: danmakuData.color,
+        fontSize: danmakuData.fontSize,
+        speed: danmakuData.speed,
+        timestamp: Date.now(),
+        isHistory: false
+      }
+
+      // 使用数组的展开运算符触发 Vue 的响应式更新
+      danmakuList.value = [...danmakuList.value, localDanmaku]
+
+      // 注意：不再在这里限制 danmakuList 的数量
+      // 数量限制应该在 SimpleDanmaku 组件中的 visibleDanmakus 中处理
+      console.log('[Danmaku] danmakuList 长度:', danmakuList.value.length)
+
+      console.log('[Danmaku] 本地已添加弹幕:', text)
+
       // 发送到服务器
       socket.emit('send_danmaku', danmakuData)
-      console.log('[Danmaku] 发送弹幕:', text)
+      console.log('[Danmaku] 发送弹幕到服务器:', text)
+
+      // 3秒后清理待处理列表（防止误判）
+      setTimeout(() => {
+        pendingDanmakus.value.delete(text)
+      }, 3000)
     } catch (error) {
       console.error('[Danmaku] 发送弹幕失败:', error)
     }
